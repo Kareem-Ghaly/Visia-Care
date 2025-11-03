@@ -13,8 +13,10 @@ class OpticalStore extends Model
         'user_id',
         'name',
         'shift',
+        'description',
+    'location',
     ];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);

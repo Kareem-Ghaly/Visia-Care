@@ -12,42 +12,52 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-
-        $username = env('ADMIN_USERNAME', 'superadmin');
-        $email    = env('ADMIN_EMAIL', 'admin@example.com');
-        $password = env('ADMIN_PASSWORD', null);
-        if (empty($password)) {
-            $password = bin2hex(random_bytes(8));
-            $this->command->warn("ADMIN_PASSWORD not set in .env. Seeder created random password: {$password}");
-        }
-        $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
-        $user = User::firstOrCreate(
-            ['email' => $email],
+        $admins = [
             [
-                'full_name'    => 'kareem ghaly',
-                'phone_number' => '0938891025',
-                'gender'       => 'male',
-                'password'     => Hash::make($password),
-                'status'       => 'approved',
-            ]
-        );
-        if (! $user->hasRole('Admin')) {
-            $user->assignRole($role);
+                'username' => 'Mohammed Rabata',
+                'email'    => 'admin1@example.com',
+                'name' => 'Mohammed Rabata',
+                'phone'    => '0987105451',
+            ],
+
+            [
+                'username' => 'Kareem Ghaly',
+                'email'    => 'admin2@example.com',
+                'name' => 'Kareem Ghaly',
+                'phone'    => '0938891025',
+            ],
+        ];
+
+        $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
+
+        foreach ($admins as $adminData) {
+            $password = env('ADMIN_PASSWORD', bin2hex(random_bytes(8)));
+
+            $user = User::firstOrCreate(
+                ['email' => $adminData['email']],
+                [
+                    'name'    => $adminData['name'],
+                    'phone_number' => $adminData['phone'],
+                    'gender'       => 'male',
+                    'password'     => Hash::make($password),
+                    'status'       => 'approved',
+                ]
+            );
+
+            if (! $user->hasRole('Admin')) {
+                $user->assignRole($role);
+            }
+
+            $admin = Admin::firstOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'username' => $adminData['username'],
+                    'email'    => $adminData['email'],
+                    'Password' => $password
+                ]
+            );
+
+            $this->command->info("Admin {$adminData['email']} seeded");
         }
-
-
-         $admin = Admin::where('user_id', $user->id)->first();
-
-        if ($admin) {
-            $this->command->info(" Admin for {$email} already exists. Skipping creation.");
-        } else {
-            Admin::create([
-                'user_id'  => $user->id,
-                'username' => $username,
-                'Password'=>$password,
-                'email'    => $email,
-
-            ]);
     }
-}
 }

@@ -7,11 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductOrder extends Model
 {
-   use HasFactory;
+    use HasFactory;
 
     protected $fillable = [
-        'optical_product_id', 'patient_id', 'prescription_id',
-        'is_accepted', 'status', 'total_price', 'delivery_time'
+        'optical_product_id',
+        'patient_id',
+        'prescription_id',
+        'is_accepted',
+        'status',
+        'total_price',
+        'delivery_time'
     ];
 
     public function product()

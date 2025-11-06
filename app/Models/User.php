@@ -13,14 +13,21 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable ,HasApiTokens , HasRoles;
+    use HasFactory, Notifiable, HasApiTokens, HasRoles;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
-    protected $fillable = ['full_name', 'email', 'phone_number', 'gender', 'password','status'];
+    protected $fillable = [
+        'name',
+        'email',
+        'phone_number',
+        'gender',
+        'password',
+        'status'
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -29,14 +36,30 @@ class User extends Authenticatable
      */
     protected $hidden = ['password'];
 
-    public function doctorProfile() { return $this->hasOne(DoctorProfile::class); }
-    public function patientProfile() { return $this->hasOne(PatientProfile::class); }
-    public function opticalStore() { return $this->hasOne(OpticalStore::class); }
-    public function sessions() { return $this->hasMany(Session::class); }
-public function admin()
-{
-    return $this->hasOne(Admin::class);
-}
+    public function doctorProfile()
+    {
+        return $this->hasOne(DoctorProfile::class);
+    }
+    public function patientProfile()
+    {
+        return $this->hasOne(PatientProfile::class);
+    }
+    public function opticalStore()
+    {
+        return $this->hasOne(OpticalStore::class);
+    }
+    public function sessions()
+    {
+        return $this->hasMany(Session::class);
+    }
+    public function admin()
+    {
+        return $this->hasOne(Admin::class);
+    }
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class , 'receiver_id');
+    }
     /**
      * Get the attributes that should be cast.
      *

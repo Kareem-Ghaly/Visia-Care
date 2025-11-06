@@ -11,6 +11,12 @@ class Appointment extends Model
 
     protected $fillable = ['doctor_id', 'patient_profile_id', 'start_date', 'end_date', 'status'];
 
-    public function doctor() { return $this->belongsTo(DoctorProfile::class); }
-    public function patient() { return $this->belongsTo(PatientProfile::class, 'patient_profile_id'); }
+    public function doctor()
+    {
+        return $this->belongsTo(DoctorProfile::class);
+    }
+    public function patient()
+    {
+        return $this->belongsTo(PatientProfile::class, 'patient_profile_id');
+    }
 }

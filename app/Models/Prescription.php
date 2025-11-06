@@ -11,6 +11,12 @@ class Prescription extends Model
 
     protected $fillable = ['doctor_id', 'medical_record_id', 'medication_name', 'dosage', 'instructions', 'status'];
 
-    public function doctor() { return $this->belongsTo(DoctorProfile::class); }
-    public function medicalRecord() { return $this->belongsTo(MedicalRecord::class); }
+    public function doctor()
+    {
+        return $this->belongsTo(DoctorProfile::class);
+    }
+    public function medicalRecord()
+    {
+        return $this->belongsTo(MedicalRecord::class);
+    }
 }

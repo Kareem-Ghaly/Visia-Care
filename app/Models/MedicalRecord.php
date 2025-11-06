@@ -11,7 +11,16 @@ class MedicalRecord extends Model
 
     protected $fillable = ['patient_profile_id', 'doctor_id', 'name', 'description', 'doctor_notes'];
 
-    public function doctor() { return $this->belongsTo(DoctorProfile::class, 'doctor_id'); }
-    public function patient() { return $this->belongsTo(PatientProfile::class, 'patient_profile_id'); }
-    public function prescriptions() { return $this->hasMany(Prescription::class, 'medical_record_id'); }
+    public function doctor()
+    {
+        return $this->belongsTo(DoctorProfile::class, 'doctor_id');
+    }
+    public function patient()
+    {
+        return $this->belongsTo(PatientProfile::class, 'patient_profile_id');
+    }
+    public function prescriptions()
+    {
+        return $this->hasMany(Prescription::class, 'medical_record_id');
+    }
 }

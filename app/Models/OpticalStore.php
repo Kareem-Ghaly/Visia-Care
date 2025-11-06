@@ -11,10 +11,10 @@ class OpticalStore extends Model
 
     protected $fillable = [
         'user_id',
-        'name',
+        'storeName',
         'shift',
         'description',
-    'location',
+        'location',
     ];
 
     public function user()

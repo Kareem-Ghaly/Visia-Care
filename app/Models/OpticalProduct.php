@@ -18,5 +18,5 @@ class OpticalProduct extends Model
     public function orders()
     {
         return $this->hasMany(ProductOrder::class, 'optical_product_id');
-    }   
+    }
 }

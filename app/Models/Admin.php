@@ -12,7 +12,7 @@ class Admin extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'full_name',
+        'name',
         'email',
         'password',
     ];
@@ -21,8 +21,8 @@ class Admin extends Authenticatable
         'password',
     ];
 
-public function user()
-{
-    return $this->belongsTo(User::class);
-}
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

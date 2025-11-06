@@ -22,7 +22,7 @@ class OpticalStoreRegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'   => ['required', 'string', 'max:255'],
+            'storeName'   => ['required', 'string', 'max:255'],
             'email'        => ['required', 'email', 'unique:users,email'],
             'password'     => ['required', 'string', 'min:8'],
             'phone_number' => ['required', 'string', 'unique:users,phone_number'],
@@ -35,9 +35,19 @@ class OpticalStoreRegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Store name is required.',
+            'storeName.required' => 'Store name is required.',
             'email.unique'        => 'Email is already taken.',
             'phone_number.unique' => 'Phone number already exists.',
         ];
+    }
+         protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        $response = response()->json([
+            'success' => false,
+            'message' => 'Validation errors',
+            'errors'  => $validator->errors(),
+        ], 422);
+
+        throw new \Illuminate\Validation\ValidationException($validator, $response);
     }
 }

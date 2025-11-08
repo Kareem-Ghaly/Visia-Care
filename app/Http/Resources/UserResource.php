@@ -20,7 +20,7 @@ class UserResource extends JsonResource
 
         if ($role === 'OpticalStore' && $this->opticalStore) {
             $baseData['optical_store'] = [
-                ' Store_name'      => $this->opticalStore->name,
+                'Store_name'      => $this->opticalStore->name,
                 'shift'      => $this->opticalStore->shift ?? null,
                 'description' => $this->opticalStore->description ?? null,
                 'location'    => $this->opticalStore->location ?? null,

@@ -5,7 +5,9 @@ namespace App\Services;
 use App\Http\Requests\DoctorLoginRequest;
 use App\Http\Requests\DoctorRegisterRequest;
 use App\Http\Requests\OpticalStoreRegisterRequest;
+use App\Http\Requests\PatientRegisterRequest;
 use App\Http\Resources\DoctorResource;
+use App\Http\Resources\PatientResource;
 use App\Http\Resources\UserResource;
 use App\Models\Admin;
 use App\Models\Notification;
@@ -98,7 +100,7 @@ class AuthService
 
             $user = Auth::user();
 
-            if (!$user->hasRole(['Doctor' , 'OpticalStore'])) {
+            if (!$user->hasRole(['Admin', 'Doctor' , 'OpticalStore' , 'Patient'])) {
                 throw ValidationException::withMessages([
                     'role' => ['This account is not registered'],
                 ]);
@@ -153,4 +155,41 @@ class AuthService
             'data' => new UserResource($user),
         ], 201);
     }
+
+    public function registerPatientService(PatientRegisterRequest $request)
+    {
+        // try {
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'phone_number' => $request->phone_number,
+            'gender' => $request->gender,
+            'status' => 'approved'
+        ]);
+
+        $user->patientProfile()->create([
+            'location' => $request->location,
+            'national_number' => $request->national_number,
+            'chronic_conditions' => $request->chronic_conditions
+        ]);
+
+        $user->assignRole('Patient');
+
+        return response()->json([
+            'message' => 'Your registration , You can now login to VisiaCare',
+            'data' => new PatientResource($user),
+        ], 201);
+
+        // } catch (\Exception $e) {
+        //     Log::error("message");
+        //     ('Patient registration failed: ' . $e->getMessage());
+
+        //     // return response()->json([
+        //     //     'message' => 'An error occurred during registration please try again later',
+        //     // ], 500);
+        // }
+    }
 }
+
+

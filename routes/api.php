@@ -4,6 +4,7 @@
 use App\Http\Controllers\AdminDashboard\ApprovalRequestsController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\DoctorAuthController;
+use App\Http\Controllers\Auth\PatientAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\OpticalStoreController;
@@ -23,11 +24,12 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
 
 Route::prefix('auth')->group(function () {
 
-    Route::post('/login/admin', [AdminAuthController::class, 'login']);
+    // Route::post('/login/admin', [AdminAuthController::class, 'login']);
     Route::post('/login', [DoctorAuthController::class, 'login']);
 
     Route::post('/register/doctor', [DoctorAuthController::class, 'register']);
     Route::post('/register/opticalstore', [OpticalStoreController::class, 'register']);
+    Route::post('/register/patient', [PatientAuthController::class, 'register']);
 });
 
 Route::prefix('doctor')->group(function () {

@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\OpticalStoreRegisterRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DoctorLoginRequest;
+use App\Http\Requests\PatientRegisterRequest;
 use App\Services\AuthService;
+use Illuminate\Http\Request;
 
-class OpticalStoreController extends Controller
+class PatientAuthController extends Controller
 {
     public function __construct(protected AuthService $service) {}
 
-    public function register(OpticalStoreRegisterRequest $request)
+   public function register(PatientRegisterRequest $request)
     {
-        return $this->service->registerOpticalStoreService($request);
+        return $this->service->registerPatientService($request);
     }
     public function login(DoctorLoginRequest $request)
     {

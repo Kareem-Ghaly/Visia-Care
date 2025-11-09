@@ -19,39 +19,39 @@ use Illuminate\Validation\ValidationException;
 
 class AuthService
 {
-    public function loginAdminService(array $credentials)
-    {
-        $user = User::where('email', $credentials['email'])->first();
+    // public function loginAdminService(array $credentials)
+    // {
+    //     $user = User::where('email', $credentials['email'])->first();
 
-        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid email or password'
-            ], 401);
-        }
-        if (! $user->admin) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Access denied not an admin account',
-            ], 403);
-        }
+    //     if (! $user || ! Hash::check($credentials['password'], $user->password)) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Invalid email or password'
+    //         ], 401);
+    //     }
+    //     if (! $user->admin) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Access denied not an admin account',
+    //         ], 403);
+    //     }
 
-        $token = $user->createToken('admin_token')->plainTextToken;
+    //     $token = $user->createToken('admin_token')->plainTextToken;
 
-        return [
-            'success' => true,
-            'message' => 'Admin login successful',
-            'data' => [
-                'admin' => [
-                    'id' => $user->id,
-                    'email' => $user->email,
-                    'username' => $user->admin->username,
-                ],
-                'role' => $user->getRoleNames()->first(),
-                'token' => $token,
-            ]
-        ];
-    }
+    //     return [
+    //         'success' => true,
+    //         'message' => 'Admin login successful',
+    //         'data' => [
+    //             'admin' => [
+    //                 'id' => $user->id,
+    //                 'email' => $user->email,
+    //                 'username' => $user->admin->username,
+    //             ],
+    //             'role' => $user->getRoleNames()->first(),
+    //             'token' => $token,
+    //         ]
+    //     ];
+    // }
 
     public function registerDoctorService(DoctorRegisterRequest $request)
     {
@@ -100,7 +100,7 @@ class AuthService
 
             $user = Auth::user();
 
-            if (!$user->hasRole(['Admin', 'Doctor' , 'OpticalStore' , 'Patient'])) {
+            if (!$user->hasRole(['Admin', 'Doctor', 'OpticalStore', 'Patient'])) {
                 throw ValidationException::withMessages([
                     'role' => ['This account is not registered'],
                 ]);
@@ -112,11 +112,13 @@ class AuthService
                 ]);
             }
 
+            $role = $user->getRoleNames()->first() ?? 'Unassigned';
+
             return response()->json([
                 'message' => 'Login successful.',
                 'token' => $user->createToken('login-token')->plainTextToken,
+                'role' => $role,
             ]);
-
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation failed',
@@ -191,5 +193,3 @@ class AuthService
         // }
     }
 }
-
-

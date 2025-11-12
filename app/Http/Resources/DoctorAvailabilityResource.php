@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class DoctorAvailabilityResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+
+            'day_in_week' => $this->day_in_week,
+            'start_time'  => $this->start_time,
+            'end_time'    => $this->end_time,
+            'doctor _id' =>$this->doctor?->id,
+             'doctor_name' => $this->doctor?->user?->name,
+             'location' => $this->doctor?->location,
+
+
+
+
+
+        ];
+    }
+}

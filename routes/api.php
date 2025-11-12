@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\DoctorAuthController;
 use App\Http\Controllers\Auth\PatientAuthController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\DoctorAvailabilityController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\OpticalStoreController;
@@ -37,5 +38,7 @@ Route::prefix('doctor')->group(function () {
     Route::get('/approved', [DoctorController::class, 'getApprovedDoctors']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/notifications', [DoctorNotificationController::class, 'getDoctorNotifications']);
+         Route::post('/availability', [DoctorAvailabilityController::class, 'store']);
     });
 });
+

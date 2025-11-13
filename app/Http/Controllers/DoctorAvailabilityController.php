@@ -13,4 +13,9 @@ class DoctorAvailabilityController extends Controller
     {
         return $this->service->createDoctorAvailability($request->validated());
     }
+    public function show($doctorid)
+{
+    return $this->service->getAvailabilitiesByDocto($doctorid);
+}
+
 }

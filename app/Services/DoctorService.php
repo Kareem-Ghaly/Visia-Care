@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Http\Resources\DoctorResource;
 use App\Models\User;
-use App\Models\DoctorProfile;
 
 use App\Http\Resources\UserResource;
 
@@ -43,4 +42,6 @@ class DoctorService
             ], 500);
         }
     }
+
+
 }

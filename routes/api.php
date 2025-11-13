@@ -35,6 +35,7 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('doctor')->group(function () {
+    Route::get ('/{doctor_id}/availabilities',[DoctorAvailabilityController::class,'show']);
     Route::get('/approved', [DoctorController::class, 'getApprovedDoctors']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/notifications', [DoctorNotificationController::class, 'getDoctorNotifications']);

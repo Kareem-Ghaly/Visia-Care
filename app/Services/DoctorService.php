@@ -13,7 +13,7 @@ class DoctorService
     public function getApprovedDoctors()
     {
         try {
-            $doctors = User::role('Doctor')->with('doctorProfile')->where('status', 'approved')->get();
+            $doctors = User::role('Doctor')->with('doctorProfile')->where('status', 'approved')->paginate(10);
             if ($doctors->isEmpty()) {
                 return response()->json([
                     'status' => 'success',
@@ -23,10 +23,18 @@ class DoctorService
                 ], 200);
             }
             return response()->json([
-                'status' => 'success',
-                'message' => 'Approved doctors fetched successfully',
-                'data' =>  DoctorResource::collection($doctors),
-            ], 200);
+            'status' => 'success',
+            'message' => 'Approved doctors fetched successfully',
+            'data' => [
+                'doctors' => DoctorResource::collection($doctors),
+                'pagination' => [
+                    'current_page' => $doctors->currentPage(),
+                    'last_page' => $doctors->lastPage(),
+                    'per_page' => $doctors->perPage(),
+                    'total' => $doctors->total(),
+                ],
+            ],
+        ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status'  => 'error',

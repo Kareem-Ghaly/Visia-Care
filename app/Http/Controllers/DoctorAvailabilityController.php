@@ -21,5 +21,10 @@ class DoctorAvailabilityController extends Controller
 public function update(UpdateDoctorAvailabilityRequest $request){
     return $this->service->updateDoctorAvailability($request->validated());
 }
+public function destroy()
+{
+    return $this->service->deleteDoctorAvailability();
+}
+
 
 }

@@ -54,5 +54,6 @@ Route::prefix('doctor')->group(function () {
         Route::get('/notifications', [DoctorNotificationController::class, 'getDoctorNotifications']);
          Route::post('/availability', [DoctorAvailabilityController::class, 'store']);
          Route::put('/availability', [DoctorAvailabilityController::class, 'update']);
+         Route::delete('/availability', [DoctorAvailabilityController::class, 'destroy']);
     });
 });

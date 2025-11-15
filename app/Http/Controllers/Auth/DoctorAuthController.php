@@ -7,6 +7,8 @@ use App\Http\Requests\DoctorLoginRequest;
 use App\Http\Requests\DoctorRegisterRequest;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
+//use Illuminate\Support\Facades\Request;
 
 class DoctorAuthController extends Controller
 {
@@ -19,5 +21,9 @@ class DoctorAuthController extends Controller
     public function login(DoctorLoginRequest $request)
     {
         return $this->service->loginService($request);
+    }
+    public function logout(Request $request)
+    {
+        return $this->service->logoutService($request);
     }
 }

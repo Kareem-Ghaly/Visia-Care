@@ -88,4 +88,28 @@ class DoctorAvailabilityService
             ], 500);
         }
     }
+    public function updateDoctorAvailability(array $data){
+try{
+        $user = Auth::user();
+        if(!$user->hasRole('Doctor')){
+            return response()->json([
+                'status'=> 'error',
+                'message'=> 'Only doctors can update availability records',
+            ],403);
+
+        }
+        $doctorprofile=$user->doctorprofile;
+        if(!$doctorprofile){
+         return response()->json([ 'status' => 'error', 'message' => 'Doctor profile not found.', ], 404); }
+         $availability = $doctorprofile->availabilities()->first();
+        if(!$availability){
+              return response()->json([ 'status' => 'error', 'message' => 'No availability record found to update.', ], 404); }
+              $availability->update($data);
+              return response()->json([
+                'status' => 'success', 'message' => 'Doctor availability updated successfully.', 'data' => new DoctorAvailabilityResource($availability), ], 200);
+        }
+        catch (\Exception $e) {
+return response()->json([ 'status' => 'error', 'message' => 'An error occurred while updating doctor availability',],500)
+;    }
+    }
 }

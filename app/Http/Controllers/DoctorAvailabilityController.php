@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\DoctorAvailabilityRequest;
+use App\Http\Requests\UpdateDoctorAvailabilityRequest;
 use App\Services\DoctorAvailabilityService;
 
 class DoctorAvailabilityController extends Controller
@@ -16,6 +17,9 @@ class DoctorAvailabilityController extends Controller
     public function show($doctorid)
 {
     return $this->service->getAvailabilitiesByDocto($doctorid);
+}
+public function update(UpdateDoctorAvailabilityRequest $request){
+    return $this->service->updateDoctorAvailability($request->validated());
 }
 
 }

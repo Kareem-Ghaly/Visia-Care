@@ -102,7 +102,7 @@ class DoctorAvailabilityService
             if (!$doctorprofile) {
                 return response()->json(['status' => 'error', 'message' => 'Doctor profile not found.',], 404);
             }
-            $availability = $doctorProfile->availabilities()->first();
+            $availability =  $doctorprofile->availabilities()->first();
             if (!$availability) {
                 return response()->json(['status' => 'error', 'message' => 'No availability record found to update.',], 404);
             }

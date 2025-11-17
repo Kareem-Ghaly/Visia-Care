@@ -154,6 +154,7 @@ class AuthService
 
         return response()->json([
             'message' => 'Your registration , You can now login to VisiaCare',
+            'token' => $user->createToken('registar-token')->plainTextToken,
             'data' => new PatientResource($user),
         ], 201);
 

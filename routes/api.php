@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminDashboard\UpdateAccountStatusController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\DoctorAuthController;
 use App\Http\Controllers\Auth\PatientAuthController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DoctorAvailabilityController;
 use Illuminate\Http\Request;
@@ -55,5 +56,13 @@ Route::prefix('doctor')->group(function () {
          Route::post('/availability', [DoctorAvailabilityController::class, 'store']);
          Route::put('/availability', [DoctorAvailabilityController::class, 'update']);
          Route::delete('/availability', [DoctorAvailabilityController::class, 'destroy']);
+
+
     });
+
+
+});
+Route::middleware('auth:sanctum')->prefix('/appointments')->group(function () {
+    Route::post('/book', [AppointmentController::class, 'store']);
+
 });

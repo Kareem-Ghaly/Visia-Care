@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\PatientAuthController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DoctorAvailabilityController;
+use App\Http\Controllers\DoctorDashbaord\DoctorAppointmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\OpticalStoreController;
@@ -64,5 +65,6 @@ Route::prefix('doctor')->group(function () {
 });
 Route::middleware('auth:sanctum')->prefix('/appointments')->group(function () {
     Route::post('/book', [AppointmentController::class, 'store']);
+     Route::get('/pending', [DoctorAppointmentController::class, 'getPending']);
 
 });

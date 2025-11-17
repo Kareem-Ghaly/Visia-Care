@@ -11,5 +11,9 @@ class DoctorAppointmentController extends Controller
     public function getPending(){
         return $this->service->getPendingAppointments();
     }
-
+public function approve($id)
+    {
+        return $this->service->approveAppointment($id);
+    }
+    
 }

@@ -15,5 +15,8 @@ public function approve($id)
     {
         return $this->service->approveAppointment($id);
     }
-    
+    public function reject($id)
+    {
+        return $this->service->rejectAppointment($id);
+    }
 }

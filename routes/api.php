@@ -67,5 +67,7 @@ Route::middleware('auth:sanctum')->prefix('/appointments')->group(function () {
     Route::post('/book', [AppointmentController::class, 'store']);
      Route::get('/pending', [DoctorAppointmentController::class, 'getPending']);
       Route::put('/{id}/approve', [DoctorAppointmentController::class, 'approve']);
+        Route::put('/{id}/reject', [DoctorAppointmentController::class, 'reject']);
+
 
 });

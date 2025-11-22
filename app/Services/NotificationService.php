@@ -2,18 +2,32 @@
 
 namespace App\Services;
 
-use App\Models\Notification;
-use App\Http\Resources\NatificationResource;
+use App\Models\User;
 
 class NotificationService
 {
-    public function getNotificationsService()
+    public function getNotificationsByRole(string $role)
     {
+        $user = User::role($role)->first();
 
-        $notifications = Notification::where('receiver_id', auth()->id())->latest()->get();
+        if (!$user) {
+            return [
+                'success' => false,
+                'message' => "No user found with role {$role}"
+            ];
+        }
 
-        return response()->json([
-            'data' => NatificationResource::collection($notifications),
-        ]);
+        return [
+            'success' => true,
+            'data' => $user->notifications()->latest()->get()
+        ];
+    }
+
+    public function getMyNotifications($user)
+    {
+        return [
+            'success' => true,
+            'data' => $user->notifications()->latest()->get()
+        ];
     }
 }

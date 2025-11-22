@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\OpticalStoreController;
 use App\Http\Controllers\DoctorDashbaord\DoctorNotificationController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -70,4 +71,8 @@ Route::middleware('auth:sanctum')->prefix('/appointments')->group(function () {
         Route::put('/{id}/reject', [DoctorAppointmentController::class, 'reject']);
 
 
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/notifications/{role}', NotificationController::class);
 });

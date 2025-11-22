@@ -3,20 +3,21 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewRequestNotification extends Notification
+class AccountStatusNotification extends Notification
 {
     use Queueable;
+
+    protected string $status;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(string $status)
     {
-        //
+        $this->status = $status; // approved أو rejected
     }
 
     /**
@@ -35,9 +36,11 @@ class NewRequestNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+            ->subject('Account Status Update')
+            ->greeting('Hello ' . $notifiable->name)
+            ->line("Your account has been {$this->status} by the admin")
+            ->action('Login Now', url('/login'))
+            ->line('Thank you for using VisiaCare');
     }
 
     /**
@@ -48,7 +51,7 @@ class NewRequestNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'status' => $this->status,
         ];
     }
 }

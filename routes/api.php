@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\OpticalStoreController;
 use App\Http\Controllers\DoctorDashbaord\DoctorNotificationController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\MedicalRecordController;
+use App\Http\Controllers\PrescriptionController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -33,7 +35,7 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::get('/opticals/approved', AccountApprovalController::class);
     Route::get('/doctors/rejected', AccountApprovalController::class);
     Route::get('/opticals/rejected', AccountApprovalController::class);
-    Route::post('/update-status' , [UpdateAccountStatusController::class, 'update']);
+    Route::post('/update-status', [UpdateAccountStatusController::class, 'update']);
 });
 
 
@@ -51,28 +53,29 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('doctor')->group(function () {
-    Route::get ('/{doctor_id}/availabilities',[DoctorAvailabilityController::class,'show']);
+    Route::get('/{doctor_id}/availabilities', [DoctorAvailabilityController::class, 'show']);
     Route::get('/approved', [DoctorController::class, 'getApprovedDoctors']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/notifications', [DoctorNotificationController::class, 'getDoctorNotifications']);
-         Route::post('/availability', [DoctorAvailabilityController::class, 'store']);
-         Route::put('/availability', [DoctorAvailabilityController::class, 'update']);
-         Route::delete('/availability', [DoctorAvailabilityController::class, 'destroy']);
-
-
+        Route::post('/availability', [DoctorAvailabilityController::class, 'store']);
+        Route::put('/availability', [DoctorAvailabilityController::class, 'update']);
+        Route::delete('/availability', [DoctorAvailabilityController::class, 'destroy']);
     });
-
-
 });
 Route::middleware('auth:sanctum')->prefix('/appointments')->group(function () {
     Route::post('/book', [AppointmentController::class, 'store']);
-     Route::get('/pending', [DoctorAppointmentController::class, 'getPending']);
-      Route::put('/{id}/approve', [DoctorAppointmentController::class, 'approve']);
-        Route::put('/{id}/reject', [DoctorAppointmentController::class, 'reject']);
-
-
+    Route::get('/pending', [DoctorAppointmentController::class, 'getPending']);
+    Route::put('/{id}/approve', [DoctorAppointmentController::class, 'approve']);
+    Route::put('/{id}/reject', [DoctorAppointmentController::class, 'reject']);
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/notifications/{role}', NotificationController::class);
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/medical-records', [MedicalRecordController::class, 'store']);
+    Route::post('/prescriptions', [PrescriptionController::class, 'store']);
+    Route::get('/my-prescriptions', [PrescriptionController::class, 'myPrescriptions']);
 });

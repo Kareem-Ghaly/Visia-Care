@@ -79,10 +79,11 @@ class AuthService
             }
 
             $role = $user->getRoleNames()->first() ?? 'Unassigned';
+            $token = $user->createToken('login-token')->plainTextToken;
 
             return response()->json([
                 'message' => 'Login successful.',
-                'token' => $user->createToken('login-token')->plainTextToken,
+                'token' => $token,
                 'role' => $role,
             ]);
         } catch (ValidationException $e) {

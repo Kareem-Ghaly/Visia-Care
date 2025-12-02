@@ -20,7 +20,7 @@ class DoctorAvailabilityResource extends JsonResource
             'start_time'  => $this->start_time,
             'end_time'    => $this->end_time,
             'doctor _id' =>$this->doctor?->id,
-            ' doctor_availabilities_id'=>$this->id,
+            'doctor_availabilities_id'=>$this->id,
 
              'doctor_name' => $this->doctor?->user?->name,
              'location' => $this->doctor?->location,

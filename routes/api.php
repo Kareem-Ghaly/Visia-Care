@@ -62,6 +62,12 @@ Route::prefix('doctor')->group(function () {
         Route::delete('/availability', [DoctorAvailabilityController::class, 'destroy']);
     });
 });
+
+// Route::prefix('/appointments')->group(function () {
+//     Route::post('/book', [AppointmentController::class, 'store']);
+// });
+
+
 Route::middleware('auth:sanctum')->prefix('/appointments')->group(function () {
     Route::post('/book', [AppointmentController::class, 'store']);
     Route::get('/pending', [DoctorAppointmentController::class, 'getPending']);

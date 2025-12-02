@@ -13,4 +13,11 @@ class Authenticate extends Middleware
         }
         return null;
     }
+
+    // protected function redirectTo($request)
+    // {
+    //     if (! $request->expectsJson()) {
+    //         return null;
+    //     }
+    // }
 }

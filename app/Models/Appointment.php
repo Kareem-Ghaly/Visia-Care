@@ -18,6 +18,8 @@ class Appointment extends Model
     //     'status',
     //     ];
 
+
+
     protected $fillable = [
     'doctor_id',
     'patient_profile_id',

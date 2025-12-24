@@ -81,11 +81,27 @@ class AuthService
             $role = $user->getRoleNames()->first() ?? 'Unassigned';
             $token = $user->createToken('login-token')->plainTextToken;
 
-            return response()->json([
-                'message' => 'Login successful.',
-                'token' => $token,
-                'role' => $role,
-            ]);
+           $response = [
+    'message' => 'Login successful.',
+    'token' => $token,
+    'role' => $role,
+    'user_id' => $user->id,
+];
+
+if ($user->hasRole('Patient')) {
+    $response['patient_profile_id'] = optional($user->patientProfile)->id;
+}
+
+if ($user->hasRole('Doctor')) {
+    $response['doctor_profile_id'] = optional($user->doctorProfile)->id;
+}
+
+if ($user->hasRole('OpticalStore')) {
+    $response['optical_store_id'] = optional($user->opticalstore)->id;
+}
+
+return response()->json($response);
+
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation failed',
@@ -142,7 +158,8 @@ class AuthService
             'password' => bcrypt($request->password),
             'phone_number' => $request->phone_number,
             'gender' => $request->gender,
-            'status' => 'approved'
+            'status' => 'approved',
+
         ]);
 
         $user->patientProfile()->create([

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MedicalRecordRequest;
 use App\Services\MedicalRecordService;
 use Illuminate\Http\Request;
 
@@ -13,8 +14,8 @@ class MedicalRecordController extends Controller
         $this->service = $service;
     }
 
-    public function store(Request $request)
+    public function store(MedicalRecordRequest $request)
     {
-        return response()->json($this->service->createRecord($request->all()));
+        return $this->service->createRecord($request->validated());
     }
 }

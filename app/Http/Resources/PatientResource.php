@@ -11,6 +11,7 @@ class PatientResource extends JsonResource
         $role = $this->getRoleNames()->first() ?? 'Unassigned';
         return [
             'id' => $this->id,
+            'patient_profile_id' =>$this-> PatientProfile->id,
             'name' => $this->name,
             'email' => $this->email,
             'phone_number' => $this->phone_number,

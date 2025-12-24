@@ -18,4 +18,8 @@ class MedicalRecordController extends Controller
     {
         return $this->service->createRecord($request->validated());
     }
+    public function show($id)
+    {
+        return $this->service->show($id);
+    }
 }

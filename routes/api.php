@@ -86,8 +86,9 @@ Route::middleware('auth:sanctum')->group(function () {
      Route::get('/medical-records/{id}', [MedicalRecordController::class, 'show']);
     Route::post('/prescriptions', [PrescriptionController::class, 'store']);
     Route::get('/my-prescriptions', [PrescriptionController::class, 'myPrescriptions']);
-    
+
 });
 Route::middleware('auth:sanctum')->prefix('optical')->group(function () {
     Route::post('/products',[OpticalProductController::class,'store']);
+      Route::post('/products-update/{id}',[OpticalProductController::class,'update']);
 });

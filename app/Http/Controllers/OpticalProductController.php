@@ -31,7 +31,10 @@ class OpticalProductController extends Controller
     {
         return $this->service->getAllStores();
     }
-
+public function destroy(int $id)
+    {
+        return $this->service->deleteProduct($id);
+    }
 
 
 }

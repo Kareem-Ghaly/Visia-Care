@@ -90,8 +90,10 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::get('/optical-stores/approved',[OpticalProductController::class,'showallopticalstores']);
 Route::middleware('auth:sanctum')->prefix('optical')->group(function () {
-    Route::post('/products',[OpticalProductController::class,'store']);
-      Route::post('/products-update/{id}',[OpticalProductController::class,'update']);
-      Route::get('/{id}/products',[OpticalProductController::class,'show']);
+Route::post('/products',[OpticalProductController::class,'store']);
+Route::post('/products-update/{id}',[OpticalProductController::class,'update']);
+Route::get('/{id}/products',[OpticalProductController::class,'show']);
+ Route::delete('/products/{id}', [OpticalProductController::class, 'destroy']);
+
 
 });

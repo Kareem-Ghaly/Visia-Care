@@ -25,45 +25,6 @@ class OpticalProductService
                     'message' => 'Optical store profile not found'
                 ], 403);
             }
-            $opticalStore=$user->opticalStore;
-             if (!$opticalStore) {
-                return  response()->json([
-                    'success' => false,
-                    'message' => 'Optical store profile not found'
-                ],403);
-        }
-        $data['optical_store_id'] = $opticalStore->id;
-         if (isset($data['image'])) {
-                    $path = $data['image']->store('optical_products', 'public');
-                    $data['image'] = $path;
-                }
-        $product=OpticalProduct::create($data);
-        return response()->json([
-             'success' => true,
-                'message' => 'Product created successfully',
-                'data' => new OpticalProductResource($product)
-        ],201);
-    }
-    catch (\Exception $e) {
-            return  response()->json([
-                'success' => false,
-                'message' => 'Failed to create product: ' . $e->getMessage()
-            ],500);
-        }
-}
-public function updateProduct(int $productId, array $data)
-{
-    try {
-        return DB::transaction(function () use ($productId, $data) {
-
-            $user = Auth::user();
-
- if (!$user->hasRole('OpticalStore')) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Only optical stores can update products'
-                ], 403);
-            }
             $opticalStore = $user->opticalStore;
             if (!$opticalStore) {
                 return response()->json([
@@ -71,39 +32,77 @@ public function updateProduct(int $productId, array $data)
                     'message' => 'Optical store profile not found'
                 ], 403);
             }
-            $product = OpticalProduct::where('optical_store_id', $opticalStore->id)
-                ->findOrFail($productId);
-                 if (isset($data['image'])) {
-
-    if ($product->image && Storage::disk('public')->exists($product->image)) {
-        Storage::disk('public')->delete($product->image);
-    }
-
-    $path = $data['image']->store('optical_products', 'public');
-    $data['image'] = $path;
-}
-
-$product->update($data);
-
-
- $product->update($data);
-
+            $data['optical_store_id'] = $opticalStore->id;
+            if (isset($data['image'])) {
+                $path = $data['image']->store('optical_products', 'public');
+                $data['image'] = $path;
+            }
+            $product = OpticalProduct::create($data);
             return response()->json([
                 'success' => true,
-                'message' => 'Product updated successfully',
+                'message' => 'Product created successfully',
                 'data' => new OpticalProductResource($product)
-            ], 200);
-        });
-
-}catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Failed to update product: ' . $e->getMessage()
-        ], 500);
-
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create product: ' . $e->getMessage()
+            ], 500);
+        }
     }
-}
-public function getProductsByStore(int $id)
+    public function updateProduct(int $productId, array $data)
+    {
+        try {
+            return DB::transaction(function () use ($productId, $data) {
+
+                $user = Auth::user();
+
+                if (!$user->hasRole('OpticalStore')) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Only optical stores can update products'
+                    ], 403);
+                }
+                $opticalStore = $user->opticalStore;
+                if (!$opticalStore) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Optical store profile not found'
+                    ], 403);
+                }
+                $product = OpticalProduct::where('optical_store_id', $opticalStore->id)
+                    ->findOrFail($productId);
+                if (isset($data['image'])) {
+
+                    if ($product->image && Storage::disk('public')->exists($product->image)) {
+                        Storage::disk('public')->delete($product->image);
+                    }
+
+                    $path = $data['image']->store('optical_products', 'public');
+                    $data['image'] = $path;
+                }
+
+                $product->update($data);
+
+
+                $product->update($data);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Product updated successfully',
+                    'data' => new OpticalProductResource($product)
+                ], 200);
+            });
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update product: ' . $e->getMessage()
+            ], 500);
+
+        }
+    }
+    public function getProductsByStore(int $id)
     {
 
         $products = OpticalProduct::where('optical_store_id', $id)
@@ -113,29 +112,68 @@ public function getProductsByStore(int $id)
             'success' => true,
             'data' => OpticalProductResource::collection($products->items()),
             'pagination' => [
-                'current_page' => $products->currentPage(),
-                'last_page'    => $products->lastPage(),
-                'per_page'     => $products->perPage(),
-                'total'        => $products->total(),
-            ],
+                    'current_page' => $products->currentPage(),
+                    'last_page' => $products->lastPage(),
+                    'per_page' => $products->perPage(),
+                    'total' => $products->total(),
+                ],
         ]);
     }
-     public function getAllStores()
+    public function getAllStores()
     {
         $stores = User::role('OpticalStore')
-                ->with('opticalStore')
-                ->where('status', 'approved')
-                ->paginate(10);
+            ->with('opticalStore')
+            ->where('status', 'approved')
+            ->paginate(10);
 
         return response()->json([
             'success' => true,
-            'data' =>  UserResource:: collection($stores->items()),
+            'data' => UserResource::collection($stores->items()),
             'pagination' => [
-                'current_page' => $stores->currentPage(),
-                'last_page'    => $stores->lastPage(),
-                'per_page'     => $stores->perPage(),
-                'total'        => $stores->total(),
-            ],
+                    'current_page' => $stores->currentPage(),
+                    'last_page' => $stores->lastPage(),
+                    'per_page' => $stores->perPage(),
+                    'total' => $stores->total(),
+                ],
         ]);
+
+    }
+    public function deleteProduct(int $productId)
+    {
+        try {
+            return DB::transaction(function () use ($productId) {
+
+                $user = Auth::user();
+                if (!$user->hasRole('OpticalStore')) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Only optical stores can delete products'
+                    ], 403);
+                }
+                $opticalStore = $user->opticalStore;
+                if (!$opticalStore) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Optical store profile not found'
+                    ], 403);
+                }
+                $product = OpticalProduct::where('optical_store_id', $opticalStore->id)
+                    ->findOrFail($productId);
+                if ($product->image && Storage::disk('public')->exists($product->image)) {
+                    Storage::disk('public')->delete($product->image);
+                }
+                $product->delete();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Product deleted successfully'
+                ], 200);
+            });
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete product: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

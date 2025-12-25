@@ -25,13 +25,12 @@ class OpticalProductController extends Controller
     }
     public function show(int $id)
 {
-    $products = OpticalProduct::where('optical_store_id', $id)->paginate(10);
-
-    return response()->json([
-        'success' => true,
-        'data' => OpticalProductResource::collection($products)
-    ]);
+     return $this->service->getProductsByStore($id);
 }
+  public function showallopticalstores()
+    {
+        return $this->service->getAllStores();
+    }
 
 
 

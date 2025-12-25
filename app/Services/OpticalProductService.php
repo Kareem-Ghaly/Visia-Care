@@ -4,9 +4,12 @@ namespace App\Services;
 
 use App\Models\OpticalProduct;
 use App\Models\OpticalStore;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\OpticalProductResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -100,4 +103,39 @@ $product->update($data);
 
     }
 }
+public function getProductsByStore(int $id)
+    {
+
+        $products = OpticalProduct::where('optical_store_id', $id)
+            ->paginate(10);
+
+        return response()->json([
+            'success' => true,
+            'data' => OpticalProductResource::collection($products->items()),
+            'pagination' => [
+                'current_page' => $products->currentPage(),
+                'last_page'    => $products->lastPage(),
+                'per_page'     => $products->perPage(),
+                'total'        => $products->total(),
+            ],
+        ]);
+    }
+     public function getAllStores()
+    {
+        $stores = User::role('OpticalStore')
+                ->with('opticalStore')
+                ->where('status', 'approved')
+                ->paginate(10);
+
+        return response()->json([
+            'success' => true,
+            'data' =>  UserResource:: collection($stores->items()),
+            'pagination' => [
+                'current_page' => $stores->currentPage(),
+                'last_page'    => $stores->lastPage(),
+                'per_page'     => $stores->perPage(),
+                'total'        => $stores->total(),
+            ],
+        ]);
+    }
 }

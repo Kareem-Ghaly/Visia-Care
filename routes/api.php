@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\OpticalStoreController;
 use App\Http\Controllers\DoctorDashbaord\DoctorNotificationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\MedicalRecordController;
+use App\Http\Controllers\OpticalProductController;
 use App\Http\Controllers\PrescriptionController;
 
 Route::get('/user', function (Request $request) {
@@ -85,4 +86,8 @@ Route::middleware('auth:sanctum')->group(function () {
      Route::get('/medical-records/{id}', [MedicalRecordController::class, 'show']);
     Route::post('/prescriptions', [PrescriptionController::class, 'store']);
     Route::get('/my-prescriptions', [PrescriptionController::class, 'myPrescriptions']);
+    
+});
+Route::middleware('auth:sanctum')->prefix('optical')->group(function () {
+    Route::post('/products',[OpticalProductController::class,'store']);
 });

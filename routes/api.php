@@ -91,4 +91,5 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->prefix('optical')->group(function () {
     Route::post('/products',[OpticalProductController::class,'store']);
       Route::post('/products-update/{id}',[OpticalProductController::class,'update']);
+      Route::get('/{id}/products',[OpticalProductController::class,'show']);
 });

@@ -23,7 +23,7 @@ class DoctorService
                 ], 200);
             }
 
-            // تعديل الـ Resource لإضافة doctor_profile_id
+            
             $data = DoctorResource::collection($doctors)->map(function ($doc) {
                 return array_merge($doc->toArray(request()), [
                     'doctor_profile_id' => $doc->doctorProfile->id ?? null

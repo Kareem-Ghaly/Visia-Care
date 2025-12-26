@@ -193,17 +193,13 @@ if (!in_array($appointmentDay, $availableDays)) {
         ]);
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Appointment created successfully.',
-            'data' => [
-                'id' => $appointment->id,
-                'doctor_id' => $availability->doctor_id,
-                'doctor_name' => $availability->doctor->user->name,
-                'date' => $appointment->appointment_date,
-                'time' => $appointment->appointment_time,
-                'status' => $appointment->status,
-            ],
-        ], 201);
+    'status' => 'success',
+    'message' => 'Appointment created successfully.',
+    'data' => new AppointmentResource(
+        $appointment->load(['doctor.user', 'patient.user'])
+    ),
+], 201);
+
 
     } catch (\Exception $e) {
         return response()->json([

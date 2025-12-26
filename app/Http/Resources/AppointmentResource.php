@@ -16,13 +16,13 @@ class AppointmentResource extends JsonResource
             'status' => $this->status,
 
             'doctor' => [
-                'id' => $this->doctor->id ?? null,
+                'doctor_id' => $this->doctor->id ?? null,
                 'name' => $this->doctor->user->name ?? null,
                 'location' => $this->doctor->location ?? null,
             ],
 
             'patient' => [
-                'id' => $this->patient->id ?? null,
+                'patient_id' => $this->patient->id ?? null,
                 'name' => $this->patient->user->name ?? null,
                 'gender' => $this->patient->user->gender ?? null,
             ],

@@ -10,19 +10,16 @@ class ProductOrder extends Model
     use HasFactory;
 
     protected $fillable = [
-        'optical_product_id',
+
         'patient_id',
         'prescription_id',
-        'is_accepted',
+        
         'status',
         'total_price',
         'delivery_time'
     ];
 
-    public function product()
-    {
-        return $this->belongsTo(OpticalProduct::class, 'optical_product_id');
-    }
+
 
     public function patient()
     {

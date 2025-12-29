@@ -15,8 +15,8 @@ class OpticalProduct extends Model
         return $this->belongsTo(OpticalStore::class, 'optical_store_id');
     }
 
-    public function orders()
+     public function orderItems()
     {
-        return $this->hasMany(ProductOrder::class, 'optical_product_id');
+        return $this->hasMany(ProductOrderItem::class, 'optical_product_id');
     }
 }

@@ -17,6 +17,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\OpticalProductController;
 use App\Http\Controllers\PrescriptionController;
+use App\Http\Controllers\ProductOrderController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -88,4 +89,7 @@ Route::get('/{id}/products',[OpticalProductController::class,'show']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/patient/appointments', [AppointmentController::class, 'myAppointments']);
 });
+Route::middleware('auth:sanctum')->prefix('product')->group(function () {
 
+Route::post('/orders',[ProductOrderController::class,'createorder']);
+});

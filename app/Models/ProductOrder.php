@@ -13,13 +13,16 @@ class ProductOrder extends Model
 
         'patient_id',
         'prescription_id',
-        
+
         'status',
         'total_price',
         'delivery_time'
     ];
 
-
+public function items()
+    {
+        return $this->hasMany(ProductOrderItem::class);
+    }
 
     public function patient()
     {

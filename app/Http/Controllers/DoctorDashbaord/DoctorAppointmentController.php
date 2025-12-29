@@ -8,15 +8,23 @@ use App\Http\Controllers\Controller;
 class DoctorAppointmentController extends Controller
 {
     public function __construct(protected DoctorAppointmentService $service){}
+
     public function getPending(){
         return $this->service->getPendingAppointments();
     }
-public function approve($id)
+
+    public function getApproved(){
+        return $this->service->getApprovedAppointments();
+    }
+
+    public function approve($id)
     {
         return $this->service->approveAppointment($id);
     }
+
     public function reject($id)
     {
         return $this->service->rejectAppointment($id);
     }
+
 }

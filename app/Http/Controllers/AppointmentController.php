@@ -9,7 +9,12 @@ class AppointmentController extends Controller
 {
     public function __construct(protected  AppointmentService $service){}
 
-public function store(AppointmentRequest $request){
-     return $this->service->createAppointment($request->validated());
-}
+    public function store(AppointmentRequest $request){
+        return $this->service->createAppointment($request->validated());
+    }
+
+    public function myAppointments()
+    {
+        return $this->service->getMyAppointments();
+    }
 }

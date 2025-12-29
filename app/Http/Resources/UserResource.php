@@ -12,6 +12,7 @@ class UserResource extends JsonResource
 
         $baseData = [
             'id'     => $this->id,
+            'optical_store_id' => $this->opticalStore?->id,
             'email'  => $this->email,
             'phone'  => $this->phone_number,
             'status' => $this->status,

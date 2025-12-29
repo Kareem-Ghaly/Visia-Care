@@ -27,6 +27,26 @@ class DoctorAppointmentService
             ],
         ]);
     }
+
+    public function getApprovedAppointments()
+    {
+        $user = Auth::user();
+        if (!$user->hasRole('Doctor')) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        $doctorprofile = $user->doctorprofile;
+        $appointments = Appointment::where('doctor_id', $doctorprofile->id)->where('status', 'confirmed')->paginate(10);
+        return response()->json([
+            'status' => 'success',
+            'data' => AppointmentResource::collection($appointments),
+            'pagination' => [
+                'current_page' => $appointments->currentPage(),
+                'last_page' => $appointments->lastPage(),
+                'per_page' => $appointments->perPage(),
+                'total' => $appointments->total(),
+            ],
+        ]);
+    }
     public function approveAppointment($appointmentId)
     {
         $user = Auth::user();

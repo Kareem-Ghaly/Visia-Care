@@ -22,13 +22,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
-
-//     Route::post('/update-status', [UpdateAccountStatusController::class, 'update']);
-
-
-
-
 Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::get('/doctors/pending', AccountApprovalController::class);
     Route::get('/opticals/pending', AccountApprovalController::class);
@@ -38,8 +31,6 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::get('/opticals/rejected', AccountApprovalController::class);
     Route::post('/update-status', [UpdateAccountStatusController::class, 'update']);
 });
-
-
 
 Route::prefix('auth')->group(function () {
 
@@ -64,14 +55,10 @@ Route::prefix('doctor')->group(function () {
     });
 });
 
-// Route::prefix('/appointments')->group(function () {
-//     Route::post('/book', [AppointmentController::class, 'store']);
-// });
-
-
 Route::middleware('auth:sanctum')->prefix('/appointments')->group(function () {
     Route::post('/book', [AppointmentController::class, 'store']);
     Route::get('/pending', [DoctorAppointmentController::class, 'getPending']);
+    Route::get('/approved', [DoctorAppointmentController::class, 'getApproved']);
     Route::put('/{id}/approve', [DoctorAppointmentController::class, 'approve']);
     Route::put('/{id}/reject', [DoctorAppointmentController::class, 'reject']);
 });
@@ -80,12 +67,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/notifications/{role}', NotificationController::class);
 });
 
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/medical-records', [MedicalRecordController::class, 'store']);
      Route::get('/medical-records/{id}', [MedicalRecordController::class, 'show']);
     Route::post('/prescriptions', [PrescriptionController::class, 'store']);
     Route::get('/my-prescriptions', [PrescriptionController::class, 'myPrescriptions']);
+
 
 });
 Route::get('/optical-stores/approved',[OpticalProductController::class,'showallopticalstores']);
@@ -97,3 +84,8 @@ Route::get('/{id}/products',[OpticalProductController::class,'show']);
 
 
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/patient/appointments', [AppointmentController::class, 'myAppointments']);
+});
+

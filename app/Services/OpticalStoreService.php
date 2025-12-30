@@ -9,7 +9,28 @@ use Illuminate\Support\Facades\Auth;
 
 class OpticalStoreService
 {
-   public function approveOrder(int $orderId)
+    public function approveOrder(int $orderId)
+{
+    $user=Auth::user();
+    $order = ProductOrder::findOrFail($orderId);
+
+    if ($order->status !== 'pending') {
+        return response()->json(['message' => 'Order cannot be approved'], 400);
+    }
+
+    $order->update(['status' => 'approved']);
+
+    Notification::create([
+         'sender_id'   => Auth::id(),
+    'receiver_id' => $order->patient->user->id,
+    'title'       => 'Order Approved',
+    'description' => "Your order #{$order->id} has been approved"
+]);
+
+
+    return response()->json(['success' => true, 'data'=>'order approved']);
+}
+public function rejectOrder(int $orderId)
 {
     $user = Auth::user();
     $store = $user->opticalStore;
@@ -21,7 +42,7 @@ class OpticalStoreService
     $order = ProductOrder::findOrFail($orderId);
 
     if ($order->status !== 'pending') {
-        return response()->json(['message' => 'Order cannot be approved'], 400);
+        return response()->json(['message' => 'Order cannot be cancelled'], 400);
     }
 
     $belongsToStore = $order->items()
@@ -34,16 +55,17 @@ class OpticalStoreService
         return response()->json(['message' => 'This order does not belong to your store'], 403);
     }
 
-    $order->update(['status' => 'approved']);
+    $order->update(['status' => 'cancelled']);
 
     Notification::create([
         'sender_id'   => $user->id,
         'receiver_id' => $order->patient->user->id,
-        'title'       => 'Order Approved',
-        'description' => "Your order #{$order->id} has been approved"
+        'title'       => 'Order cancelled',
+        'description' => "Your order #{$order->id} has been cancelled "
     ]);
 
-    return response()->json(['success' => true]);
+    return response()->json(['success' => true,
+'data'=>'order cancelled']);
 }
 
 }

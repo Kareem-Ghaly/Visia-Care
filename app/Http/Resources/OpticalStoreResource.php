@@ -14,6 +14,17 @@ class OpticalStoreResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
-    }
+        return[
+        'id' => $this->id,
+            'store_name' => $this->storeName,
+            'shift' => $this->shift,
+            'description' => $this->description,
+            'location' => $this->location,
+
+            'owner' => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+                'email' => $this->user->email,
+            ]
+            ];}
 }

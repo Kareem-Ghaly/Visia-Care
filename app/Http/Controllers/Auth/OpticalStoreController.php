@@ -8,11 +8,12 @@ use App\Http\Requests\DoctorLoginRequest;
 use App\Services\AuthService;
 //use Illuminate\Support\Facades\Request;
 use Illuminate\Http\Request;
-
+use App\Services\OpticalStoreService;
 
 class OpticalStoreController extends Controller
 {
-    public function __construct(protected AuthService $service) {}
+    public function __construct(protected AuthService $service ,protected OpticalStoreService $optical) {}
+
 
     public function register(OpticalStoreRegisterRequest $request)
     {
@@ -25,5 +26,9 @@ class OpticalStoreController extends Controller
     public function logout(Request $request)
     {
         return $this->service->logoutService($request);
+    }
+     public function approvedorder(int $orderId)
+    {
+        return $this->optical->approveOrder( $orderId);
     }
 }

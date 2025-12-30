@@ -70,18 +70,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/medical-records', [MedicalRecordController::class, 'store']);
-     Route::get('/medical-records/{id}', [MedicalRecordController::class, 'show']);
+    Route::get('/medical-records/{id}', [MedicalRecordController::class, 'show']);
     Route::post('/prescriptions', [PrescriptionController::class, 'store']);
     Route::get('/my-prescriptions', [PrescriptionController::class, 'myPrescriptions']);
 
 
 });
-Route::get('/optical-stores/approved',[OpticalProductController::class,'showallopticalstores']);
+Route::get('/optical-stores/approved', [OpticalProductController::class, 'showallopticalstores']);
 Route::middleware('auth:sanctum')->prefix('optical')->group(function () {
-Route::post('/products',[OpticalProductController::class,'store']);
-Route::post('/products-update/{id}',[OpticalProductController::class,'update']);
-Route::get('/{id}/products',[OpticalProductController::class,'show']);
- Route::delete('/products/{id}', [OpticalProductController::class, 'destroy']);
+    Route::post('/products', [OpticalProductController::class, 'store']);
+    Route::post('/products-update/{id}', [OpticalProductController::class, 'update']);
+    Route::get('/{id}/products', [OpticalProductController::class, 'show']);
+    Route::delete('/products/{id}', [OpticalProductController::class, 'destroy']);
 
 
 });
@@ -91,6 +91,10 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::middleware('auth:sanctum')->prefix('product')->group(function () {
 
-Route::post('/orders',[ProductOrderController::class,'createorder']);
- Route::get('orders/patient/{patientId}', [ProductOrderController::class, 'ordersByPatient']);
+    Route::post('/orders', [ProductOrderController::class, 'createorder']);
+    Route::get('orders/patient/{patientId}', [ProductOrderController::class, 'ordersByPatient']);
+    });
+    Route::middleware('auth:sanctum')->prefix('optical')->group(function () {
+    Route::patch('/orders/{id}/approve',[OpticalStoreController::class,'approvedorder']);
 });
+

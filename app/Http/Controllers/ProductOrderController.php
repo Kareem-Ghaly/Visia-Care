@@ -15,4 +15,8 @@ public function createorder(StoreProductOrderRequest $request)
 {
     return $this->service->create($request->validated());
 }
+public function ordersByPatient($patientId)
+{
+    return $this->service->getOrdersByPatientId($patientId);
+}
 }

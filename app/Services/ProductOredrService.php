@@ -88,6 +88,22 @@ $storeIds = collect($data['items'])->map(function ($item) {
             ], 500);
         }
     }
+    public function getOrdersByPatientId(int $patientId)
+{
+    $orders = ProductOrder::where('patient_id', $patientId)
+        ->with([
+            'items.product.opticalStore',
+            'patient.user',
+            'prescription'
+        ])
+        ->orderByDesc('created_at')
+        ->paginate(5);
+
+    return response()->json([
+        'success' => true,
+        'data' => ProductOrderResource::collection($orders)
+    ]);
+}
 }
 
 

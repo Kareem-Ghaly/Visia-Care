@@ -92,4 +92,5 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->prefix('product')->group(function () {
 
 Route::post('/orders',[ProductOrderController::class,'createorder']);
+ Route::get('orders/patient/{patientId}', [ProductOrderController::class, 'ordersByPatient']);
 });

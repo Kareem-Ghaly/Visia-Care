@@ -67,5 +67,43 @@ public function rejectOrder(int $orderId)
     return response()->json(['success' => true,
 'data'=>'order cancelled']);
 }
+public function markOrderAsReady(int $orderId)
+{
+    $user = Auth::user();
+    $store = $user->opticalStore;
+    if(!$store ){
+        return response()->json([
+            'message' => 'Unauthorized'
+        ], 403);
+    }
+    $order=ProductOrder::findOrFail($orderId);
+    $belongsToStore = $order->items()
+        ->whereHas('product', function ($q) use ($store) {
+            $q->where('optical_store_id', $store->id);
+        })
+        ->exists();
 
+    if (!$belongsToStore) {
+        return response()->json([
+            'message' => 'This order does not belong to your store'
+        ], 403);
+    }
+        $order->update([
+        'status' => 'ready',
+        'delivery_time' => now()
+    ]);
+Notification::create([
+        'sender_id'   => $user->id,
+        'receiver_id' => $order->patient->user->id,
+        'title'       => 'Order Ready',
+        'description' => "Your order #{$order->id} is ready for pickup"
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Order marked as ready'
+
+    ]);
+
+}
 }

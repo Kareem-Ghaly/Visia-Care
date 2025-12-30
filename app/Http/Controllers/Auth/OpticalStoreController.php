@@ -35,4 +35,8 @@ class OpticalStoreController extends Controller
     {
         return $this->optical->rejectOrder( $orderId);
     }
+     public function markOrderAsReady(int $orderId)
+    {
+        return $this->optical->markOrderAsReady( $orderId);
+    }
 }

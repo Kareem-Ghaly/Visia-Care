@@ -25,7 +25,7 @@ class ProductOredrService
             }
 
             DB::beginTransaction();
-$storeIds = collect($data['items'])->map(function ($item) {
+            $storeIds = collect($data['items'])->map(function ($item) {
                 return OpticalProduct::find($item['optical_product_id'])->optical_store_id;
             })->unique();
 
@@ -35,17 +35,17 @@ $storeIds = collect($data['items'])->map(function ($item) {
                     'message' => 'All products must belong to the same optical store'
                 ], 400);
             }
-              $order = ProductOrder::create([
+            $order = ProductOrder::create([
                 'patient_id' => $user->patientProfile->id,
-                'prescription_id' => $data['prescription_id'] ,
+                'prescription_id' => $data['prescription_id'],
                 'status' => 'pending',
                 'total_price' => 0
             ]);
-              $totalPrice = 0;
-              foreach ($data['items'] as $item) {
+            $totalPrice = 0;
+            foreach ($data['items'] as $item) {
                 $product = OpticalProduct::findOrFail($item['optical_product_id']);
 
-              $itemTotal = $product->price * $item['quantity'];
+                $itemTotal = $product->price * $item['quantity'];
                 $totalPrice += $itemTotal;
 
                 ProductOrderItem::create([
@@ -56,8 +56,8 @@ $storeIds = collect($data['items'])->map(function ($item) {
                     'total_price' => $itemTotal
                 ]);
             }
-             $order->update(['total_price' => $totalPrice]);
-              $storeUser = OpticalProduct::find($data['items'][0]['optical_product_id'])
+            $order->update(['total_price' => $totalPrice]);
+            $storeUser = OpticalProduct::find($data['items'][0]['optical_product_id'])
                 ->opticalStore
                 ->user;
 
@@ -68,18 +68,17 @@ $storeIds = collect($data['items'])->map(function ($item) {
                 'description' => "New order #{$order->id} received",
                 'reminder' => null
             ]);
-              DB::commit();
+            DB::commit();
 
             return response()->json([
-    'success' => true,
-    'message' => 'Order created successfully',
-    'data' => new ProductOrderResource(
-        $order->load('items.product')
-    )
-], 201);
-;
-        }
-         catch (\Exception $e) {
+                'success' => true,
+                'message' => 'Order created successfully',
+                'data' => new ProductOrderResource(
+                    $order->load('items.product')
+                )
+            ], 201);
+            ;
+        } catch (\Exception $e) {
             DB::rollBack();
 
             return response()->json([
@@ -89,21 +88,19 @@ $storeIds = collect($data['items'])->map(function ($item) {
         }
     }
     public function getOrdersByPatientId(int $patientId)
-{
-    $orders = ProductOrder::where('patient_id', $patientId)
-        ->with([
-            'items.product.opticalStore',
-            'patient.user',
-            'prescription'
-        ])
-        ->orderByDesc('created_at')
-        ->paginate(5);
-
-    return response()->json([
-        'success' => true,
-        'data' => ProductOrderResource::collection($orders)
-    ]);
-}
+    {
+        $orders = ProductOrder::where('patient_id', $patientId)
+            ->with([
+                    'items.product.opticalStore',
+                    'patient.user',
+                    'prescription'
+                ])
+            ->orderByDesc('created_at')->paginate(5);
+        return response()->json([
+            'success' => true,
+            'data' => ProductOrderResource::collection($orders)
+        ]);
+    }
 }
 
 

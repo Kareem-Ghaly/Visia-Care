@@ -176,4 +176,13 @@ class OpticalProductService
             ], 500);
         }
     }
-}
+    public function getProductById(int $id)
+{
+    $product = OpticalProduct::with('opticalStore')
+        ->findOrFail($id);
+
+    return response()->json([
+        'success' => true,
+        'data' => new OpticalProductResource($product)
+    ]);
+}}

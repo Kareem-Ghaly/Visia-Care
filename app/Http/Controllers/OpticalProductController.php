@@ -36,5 +36,9 @@ public function destroy(int $id)
         return $this->service->deleteProduct($id);
     }
 
+public function  getProductById(int $id)
+    {
+  return $this->service-> getProductById($id);
 
+}
 }

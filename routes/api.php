@@ -62,6 +62,8 @@ Route::middleware('auth:sanctum')->prefix('/appointments')->group(function () {
     Route::get('/approved', [DoctorAppointmentController::class, 'getApproved']);
     Route::put('/{id}/approve', [DoctorAppointmentController::class, 'approve']);
     Route::put('/{id}/reject', [DoctorAppointmentController::class, 'reject']);
+    Route::get('/patient/appointments', [AppointmentController::class, 'myAppointments']);
+
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -82,23 +84,22 @@ Route::middleware('auth:sanctum')->prefix('optical')->group(function () {
     Route::post('/products-update/{id}', [OpticalProductController::class, 'update']);
     Route::get('/{id}/products', [OpticalProductController::class, 'show']);
     Route::delete('/products/{id}', [OpticalProductController::class, 'destroy']);
-
-
+     Route::get('/productby/{id}', [OpticalProductController::class, 'getProductById']);
+ Route::patch('/orders/{id}/approve',[OpticalStoreController::class,'approvedorder']);
+    Route::patch('/orders/{id}/cancelled',[OpticalStoreController::class,'rejectOrder']);
+    Route::patch('/orders/{id}/ready',[OpticalStoreController::class,'markOrderAsReady']);
+    Route::get('orders/approved',[ProductOrderController::class,'approvedOrders']);
 });
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/patient/appointments', [AppointmentController::class, 'myAppointments']);
 });
 Route::middleware('auth:sanctum')->prefix('product')->group(function () {
-
     Route::post('/orders', [ProductOrderController::class, 'createorder']);
     Route::get('orders/patient/{patientId}', [ProductOrderController::class, 'ordersByPatient']);
     });
-    Route::middleware('auth:sanctum')->prefix('optical')->group(function () {
-    Route::patch('/orders/{id}/approve',[OpticalStoreController::class,'approvedorder']);
-    Route::patch('/orders/{id}/cancelled',[OpticalStoreController::class,'rejectOrder']);
-    Route::patch('/orders/{id}/ready',[OpticalStoreController::class,'markOrderAsReady']);
-    Route::get('orders/approved',[ProductOrderController::class,'approvedOrders']);
-});
+
+
 
 

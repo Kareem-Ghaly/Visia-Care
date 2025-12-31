@@ -19,4 +19,8 @@ public function ordersByPatient($patientId)
 {
     return $this->service->getOrdersByPatientId($patientId);
 }
+public function approvedOrders()
+    {
+        return $this->service->getApprovedOrders();
+    }
 }

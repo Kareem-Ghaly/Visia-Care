@@ -101,6 +101,34 @@ class ProductOredrService
             'data' => ProductOrderResource::collection($orders)
         ]);
     }
-}
+    public function getApprovedOrders()
+{
+    $user = Auth::user();
+    $store = $user->opticalStore;
 
+    if (!$store) {
+        return response()->json([
+            'message' => 'Unauthorized'
+        ], 403);
+    }
+
+    $orders = ProductOrder::where('status', 'approved')
+        ->whereHas('items.product', function ($q) use ($store) {
+            $q->where('optical_store_id', $store->id);
+        })
+        ->with([
+            'items.product',
+            'patient.user',
+             'prescription'
+
+        ])
+        ->orderByDesc('created_at')
+        ->paginate(5);
+
+    return response()->json([
+        'success' => true,
+        'data' => ProductOrderResource::collection($orders)
+    ]);
+}
+}
 

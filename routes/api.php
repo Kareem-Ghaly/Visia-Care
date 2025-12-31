@@ -97,7 +97,8 @@ Route::middleware('auth:sanctum')->prefix('product')->group(function () {
     Route::middleware('auth:sanctum')->prefix('optical')->group(function () {
     Route::patch('/orders/{id}/approve',[OpticalStoreController::class,'approvedorder']);
     Route::patch('/orders/{id}/cancelled',[OpticalStoreController::class,'rejectOrder']);
-     Route::patch('/orders/{id}/ready',[OpticalStoreController::class,'markOrderAsReady']);
+    Route::patch('/orders/{id}/ready',[OpticalStoreController::class,'markOrderAsReady']);
+    Route::get('orders/approved',[ProductOrderController::class,'approvedOrders']);
 });
 
 

@@ -34,7 +34,7 @@ class AuthService
         $user->doctorProfile()->create([
             'license' => $request->license,
             'location' => $request->location,
-            'shift' => $request->shift,
+            
             'bio' => $request->bio
         ]);
 

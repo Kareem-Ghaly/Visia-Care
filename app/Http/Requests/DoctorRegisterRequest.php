@@ -29,7 +29,6 @@ class DoctorRegisterRequest extends FormRequest
             'gender'       => 'required|in:male,female',
             'license'      => 'required|string',
             'location'     => 'required|string',
-            'shift'        => 'required|date',
             'bio'          => 'nullable|string',
 
         ];

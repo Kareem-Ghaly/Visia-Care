@@ -18,7 +18,7 @@ class DoctorResource extends JsonResource
             'status' => $this->status,
             'license' => $this->DoctorProfile->license,
             'location' => $this->DoctorProfile->location,
-            'shift' => $this->DoctorProfile->shift,
+           
             'bio' => $this->DoctorProfile->bio,
             'role' => $role
         ];

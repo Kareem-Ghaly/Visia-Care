@@ -26,7 +26,6 @@ class OpticalStoreRegisterRequest extends FormRequest
             'email'        => ['required', 'email', 'unique:users,email'],
             'password'     => ['required', 'string', 'min:8'],
             'phone_number' => ['required', 'string', 'unique:users,phone_number'],
-            'shift'        => ['nullable', 'date'],
             'description' => ['nullable', 'string', 'max:500'],
             'location'    => ['nullable', 'string', 'max:255'],
 

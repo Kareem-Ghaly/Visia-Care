@@ -1,5 +1,7 @@
 <?php
 namespace App\Services;
+use App\Notifications\NewAppointmentNotification;
+
 
 use App\Models\Appointment;
 use App\Models\DoctorAvailability;
@@ -94,6 +96,12 @@ class AppointmentService{
                     'appointment_time' => $appointmentTime->format('H:i'),
                     'status' => 'pending',
                 ]);
+                $doctorUser = $availability->doctor->user;
+
+if ($doctorUser) {
+    $doctorUser->notify(new NewAppointmentNotification($appointment));
+}
+
 
                 return response()->json([
             'status' => 'success',

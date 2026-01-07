@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services;
-
+use App\Notifications\AppointmentStatusChangedNotification;
 use App\Http\Resources\AppointmentResource;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
@@ -47,31 +47,10 @@ class DoctorAppointmentService
             ],
         ]);
     }
-    public function approveAppointment($appointmentId)
+      public function approveAppointment($appointmentId)
     {
         $user = Auth::user();
-        if (!$user->hasRole('Doctor')) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-        $doctorProfile = $user->doctorProfile;
 
-        $appointment = Appointment::where('id', $appointmentId)
-            ->where('doctor_id', $doctorProfile->id)->first();
-
-        if (!$appointment) {
-            return response()->json(['message' => 'Appointment not found'], 404);
-        }
-
-        $appointment->update(['status' => 'confirmed']);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Appointment approved successfully.',
-        ]);
-    }
-    public function rejectAppointment($appointmentId)
-    {
-        $user = Auth::user();
         if (!$user->hasRole('Doctor')) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
@@ -85,7 +64,58 @@ class DoctorAppointmentService
         if (!$appointment) {
             return response()->json(['message' => 'Appointment not found'], 404);
         }
+
+        $appointment->update(['status' => 'confirmed']);
+ $patientUser = $appointment->patient->user;
+
+        if ($patientUser) {
+            $patientUser->notify(
+                new AppointmentStatusChangedNotification(
+                    $appointment,
+                    'confirmed',
+                    'Your appointment has been approved'
+                )
+            );
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Appointment approved successfully.',
+        ]);
+    }
+    public function rejectAppointment($appointmentId)
+    {
+        $user = Auth::user();
+
+        if (!$user->hasRole('Doctor')) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $doctorProfile = $user->doctorProfile;
+
+        $appointment = Appointment::where('id', $appointmentId)
+            ->where('doctor_id', $doctorProfile->id)
+            ->first();
+
+        if (!$appointment) {
+            return response()->json(['message' => 'Appointment not found'], 404);
+        }
+
         $appointment->update(['status' => 'cancelled']);
+
+        
+        $patientUser = $appointment->patient->user;
+
+        if ($patientUser) {
+            $patientUser->notify(
+                new AppointmentStatusChangedNotification(
+                    $appointment,
+                    'cancelled',
+                    'Your appointment has been rejected'
+                )
+            );
+        }
+
         return response()->json([
             'status' => 'success',
             'message' => 'Appointment rejected successfully.',

@@ -2,7 +2,7 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Models\Notification;
+
 use Illuminate\Http\JsonResponse;
 use App\Notifications\AccountStatusNotification;
 class AccountStatusService
@@ -11,14 +11,7 @@ class AccountStatusService
     {
         $user = User::findOrFail($userId);
         $user->update(['status' => $status]);
-        Notification::create([
-            'sender_id' => auth()->id(),
-            'receiver_id' => $user->id,
-            'title' => $status === 'approved' ? 'Account Approved' : 'Account Rejected',
-            'description' => $status === 'approved'
-                ? 'Your account has been approved. You can now login'
-                : 'Your registration request has been rejected',
-        ]);
+       
         $user->notify(new AccountStatusNotification($status));
 
         return response()->json([

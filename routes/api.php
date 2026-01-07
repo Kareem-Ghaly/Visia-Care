@@ -66,9 +66,8 @@ Route::middleware('auth:sanctum')->prefix('/appointments')->group(function () {
 
 });
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/notifications/{role}', NotificationController::class);
-});
+
+
 Route::get('/getPrescriptions/{PrescriptionsId}',[PrescriptionController::class,'getPrescriptionsbyid']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/medical-records', [MedicalRecordController::class, 'store']);
@@ -99,6 +98,10 @@ Route::middleware('auth:sanctum')->prefix('product')->group(function () {
     Route::post('/orders', [ProductOrderController::class, 'createorder']);
     Route::get('orders/patient/{patientId}', [ProductOrderController::class, 'ordersByPatient']);
     });
+    Route::middleware('auth:sanctum')->get(
+    '/notifications/my',
+    [NotificationController::class, 'myNotifications']
+);
 
 
 

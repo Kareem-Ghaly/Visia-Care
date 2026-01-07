@@ -25,4 +25,8 @@ class PrescriptionController extends Controller
             $this->service->getPrescriptionsForPatient($patientProfileId)
         );
     }
+    public function getPrescriptionsbyid($PrescriptionsId){
+        return $this->service->getPrescriptionsbyid($PrescriptionsId);
+    }
+
 }

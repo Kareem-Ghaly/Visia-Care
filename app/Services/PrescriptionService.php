@@ -22,4 +22,10 @@ class PrescriptionService
             ->with(['medicalRecord', 'doctor'])
             ->get();
     }
+    public function getPrescriptionsbyid(int $PrescriptionsId){
+        $Prescriptions=Prescription::findOrFail($PrescriptionsId);
+        return $Prescriptions;
+
+    }
+
 }

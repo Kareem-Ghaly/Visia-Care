@@ -22,7 +22,7 @@ class AdminSeeder extends Seeder
 
             [
                 'username' => 'Kareem Ghaly',
-                'email'    => 'admin2@example.com',
+                'email'    => 'admin2@gmail.com',
                 'name' => 'Kareem Ghaly',
                 'phone'    => '0938891025',
             ],

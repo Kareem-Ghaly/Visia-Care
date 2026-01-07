@@ -69,7 +69,7 @@ Route::middleware('auth:sanctum')->prefix('/appointments')->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/notifications/{role}', NotificationController::class);
 });
-
+Route::get('/getPrescriptions/{PrescriptionsId}',[PrescriptionController::class,'getPrescriptionsbyid']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/medical-records', [MedicalRecordController::class, 'store']);
     Route::get('/medical-records/{id}', [MedicalRecordController::class, 'show']);

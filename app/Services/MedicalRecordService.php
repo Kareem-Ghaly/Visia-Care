@@ -93,4 +93,29 @@ class MedicalRecordService
             'prescriptions' => $prescriptions
         ], 200);
     }
+
+    public function getByPatientId($patientProfileId)
+    {
+        $user = Auth::user();
+        if (!$user || !$user->hasRole(['Doctor', 'Patient'])) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        if ($user->hasRole('Patient')) {
+            if (optional($user->patientProfile)->id != $patientProfileId) {
+                return response()->json(['message' => 'Forbidden: You can only view your own records.'], 403);
+            }
+        }
+        $records = MedicalRecord::where('patient_profile_id', $patientProfileId)
+            ->with(['doctor.user'])
+            ->get();
+
+        if ($records->isEmpty()) {
+            return response()->json(['message' => 'No medical records found for this patient.'], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $records
+        ], 200);
+    }
 }

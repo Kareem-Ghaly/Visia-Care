@@ -19,8 +19,8 @@ class PatientProfile extends Model
     {
         return $this->hasMany(Appointment::class, 'patient_profile_id');
     }
-    public function medicalRecords()
+     public function prescriptions()
     {
-        return $this->hasMany(MedicalRecord::class, 'patient_profile_id');
+        return $this->hasMany(Prescription::class, 'patient_profile_id');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\PrescriptionService;
+use App\Http\Requests\PrescriptionRequest;
 
 class PrescriptionController extends Controller
 {
@@ -13,20 +14,19 @@ class PrescriptionController extends Controller
         $this->service = $service;
     }
 
-    public function store(Request $request)
+    public function store(PrescriptionRequest $request)
     {
-        return response()->json($this->service->addPrescription($request->all()));
+        return response()->json($this->service->addPrescription($request->validated()));
     }
 
-    public function myPrescriptions()
+    public function myPrescriptions($patientProfileId)
     {
-        $patientProfileId = auth()->user()->patientProfile->id;
-        return response()->json(
-            $this->service->getPrescriptionsForPatient($patientProfileId)
-        );
+
+             return $this->service->getPrescriptionsForPatient($patientProfileId);
+
     }
     public function getPrescriptionsbyid($PrescriptionsId){
-        return $this->service->getPrescriptionsbyid($PrescriptionsId);
+        return $this->service->getPrescriptionById($PrescriptionsId);
     }
 
 }

@@ -65,15 +65,10 @@ Route::middleware('auth:sanctum')->prefix('/appointments')->group(function () {
     Route::get('/patient/appointments', [AppointmentController::class, 'myAppointments']);
 
 });
-
-
 Route::get('/my-prescriptions/{id}', [PrescriptionController::class, 'myPrescriptions']);
 Route::get('/getPrescriptions/{PrescriptionsId}',[PrescriptionController::class,'getPrescriptionsbyid']);
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/prescriptions', [PrescriptionController::class, 'store']);
-
-
-
+Route::post('/prescriptions', [PrescriptionController::class, 'store']);
 });
 Route::get('/optical-stores/approved', [OpticalProductController::class, 'showallopticalstores']);
 Route::middleware('auth:sanctum')->prefix('optical')->group(function () {

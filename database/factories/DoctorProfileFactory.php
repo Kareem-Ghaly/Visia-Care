@@ -21,7 +21,7 @@ class DoctorProfileFactory extends Factory
     {
         return [
             //
-            'user_id' => User::factory(), // ينشئ مستخدم ويربطه بالطبيب
+            'user_id' => User::factory(),
             'license' => $this->faker->unique()->numerify('LIC-#####'),
             'location' => $this->faker->city,
             'bio' => $this->faker->paragraph,

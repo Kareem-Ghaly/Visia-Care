@@ -22,7 +22,7 @@ class DoctorAvailabilityFactory extends Factory
     {
         return [
             //
-            'doctor_id' => DoctorProfile::factory(), // ينشئ DoctorProfile ويربطه
+            'doctor_id' => DoctorProfile::factory(),
             'day_in_week' => $this->faker->randomElement([
                 'monday',
                 'tuesday',

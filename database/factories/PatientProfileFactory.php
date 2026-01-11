@@ -22,10 +22,10 @@ class PatientProfileFactory extends Factory
     {
         return [
             //
-            'user_id' => User::factory(), // ينشئ مستخدم تلقائيًا ويربطه
+            'user_id' => User::factory(),
             'location' => $this->faker->city,
             'national_number' => $this->faker->unique()->numerify('##########'),
-            'chronic_conditions' => $this->faker->sentence, // أو نص قصير
+            'chronic_conditions' => $this->faker->sentence,
         ];
     }
 }

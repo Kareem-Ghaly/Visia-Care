@@ -11,6 +11,8 @@ RUN apk update && apk add --no-cache \
     git \
     unzip \
     libpq \
+    libpq-dev \
+    postgresql-dev \
     libzip-dev \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql zip
 

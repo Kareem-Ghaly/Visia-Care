@@ -82,6 +82,8 @@ Route::middleware('auth:sanctum')->prefix('optical')->group(function () {
     Route::patch('/orders/{id}/ready',[OpticalStoreController::class,'markOrderAsReady']);
     Route::get('orders/approved',[ProductOrderController::class,'approvedOrders']);
     Route::get('orders/pending', [ProductOrderController::class, 'pendingOrders']);
+    Route::get('orders/my-orders', [ProductOrderController::class, 'myOrders']);
+    Route::post('orders/{id}/reorder', [ProductOrderController::class, 'reorder']);
 
 });
 

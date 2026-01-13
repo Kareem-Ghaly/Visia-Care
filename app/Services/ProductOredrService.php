@@ -166,5 +166,63 @@ public function getPendingOrders()
         'data' => ProductOrderResource::collection($orders)
     ]);
 }
-}
+public function reorder(int $orderId)
+{
+    try {
+        $user = Auth::user();
 
+        $oldOrder = ProductOrder::where('id', $orderId)
+            ->where('patient_id', $user->patientProfile->id)
+            ->with('items')
+            ->first();
+
+        if (!$oldOrder) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Order not found or unauthorized'
+            ], 404);
+        }
+
+        $reorderData = [
+            'prescription_id' => $oldOrder->prescription_id,
+            'items' => $oldOrder->items->map(function ($item) {
+                return [
+                    'optical_product_id' => $item->optical_product_id,
+                    'quantity' => $item->quantity,
+                ];
+            })->toArray()
+        ];
+        return $this->create($reorderData);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to reorder: ' . $e->getMessage()
+        ], 500);
+    }
+}
+public function getMyOrders()
+{
+    $user = Auth::user();
+
+    if (!$user->patientProfile) {
+        return response()->json([
+            'success' => false,
+            'message' => 'User is not a patient'
+        ], 403);
+    }
+
+    $orders = ProductOrder::where('patient_id', $user->patientProfile->id)
+        ->with([
+            'items.product.opticalStore',
+            'prescription'
+        ])
+        ->orderByDesc('created_at')
+        ->paginate(10);
+
+    return response()->json([
+        'success' => true,
+        'data' => ProductOrderResource::collection($orders)
+    ]);
+}
+}

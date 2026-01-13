@@ -25,7 +25,7 @@ class ProductOrderResource extends JsonResource
             'optical_store' => $this->items->isNotEmpty()
                 ? [
                     'optical_id'   => $this->items->first()->product?->opticalStore?->id,
-
+                    'store_name'   => $this->items->first()->product?->opticalStore?->storeName,
                 ]
                 : null,
 

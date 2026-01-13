@@ -27,4 +27,12 @@ class ProductOrderController extends Controller
     {
             return $this->service->getPendingOrders();
     }
+    public function reorder(Request $request, $orderId)
+    {
+        return $this->service->reorder($orderId);
+    }
+    public function myOrders()
+    {
+        return $this->service->getMyOrders();
+    }
 }

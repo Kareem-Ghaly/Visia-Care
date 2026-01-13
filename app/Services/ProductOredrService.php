@@ -130,6 +130,7 @@ class ProductOredrService
         ->orderByDesc('created_at')
         ->paginate(5);
 
+
     return response()->json([
         'success' => true,
         'data' => ProductOrderResource::collection($orders)
@@ -137,5 +138,33 @@ class ProductOredrService
 
 }
 
+public function getPendingOrders()
+{
+    $user = Auth::user();
+    $store = $user->opticalStore;
+
+    if (!$store) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Unauthorized: User does not own an optical store'
+        ], 403);
+    }
+    $orders = ProductOrder::where('status', 'pending')
+        ->whereHas('items.product', function ($q) use ($store) {
+            $q->where('optical_store_id', $store->id);
+        })
+        ->with([
+            'items.product',
+            'patient.user',
+            'prescription'
+        ])
+        ->orderByDesc('created_at')
+        ->paginate(10);
+
+    return response()->json([
+        'success' => true,
+        'data' => ProductOrderResource::collection($orders)
+    ]);
+}
 }
 

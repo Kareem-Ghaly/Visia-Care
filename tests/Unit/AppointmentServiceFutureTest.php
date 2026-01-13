@@ -16,32 +16,35 @@ class AppointmentServiceFutureTest extends TestCase
     use RefreshDatabase;
 
     public function test_it_accepts_appointment_in_future()
-    {
-        Role::firstOrCreate(['name' => 'Patient']);
+{
+    Role::firstOrCreate(['name' => 'Patient']);
 
-        $patientUser = User::factory()->create();
-        $patientUser->assignRole('Patient');
-        $patientProfile = PatientProfile::factory()->create([
-            'user_id' => $patientUser->id,
-        ]);
+    $patientUser = User::factory()->create();
+    $patientUser->assignRole('Patient');
 
-        $doctorProfile = DoctorProfile::factory()->create();
-        $availability = DoctorAvailability::factory()->create([
-            'doctor_id' => $doctorProfile->id,
-            'day_in_week' => 'monday',
-            'start_time' => '09:00:00',
-            'end_time' => '17:00:00',
-        ]);
+    PatientProfile::factory()->create([
+        'user_id' => $patientUser->id,
+    ]);
 
-        $this->actingAs($patientUser);
+    $doctorProfile = DoctorProfile::factory()->create();
 
-        $service = app(AppointmentService::class);
+    $availability = DoctorAvailability::factory()->create([
+        'doctor_id' => $doctorProfile->id,
+        'day_in_week' => 'monday',
+        'start_time' => '09:00:00',
+        'end_time' => '17:00:00',
+    ]);
 
-        $response = $service->createAppointment([
-            'availability_id' => $availability->id,
-            'appointment_date' => now()->addDay()->toDateString(),
-            'appointment_time' => '10:00',
-        ]);
-        $this->assertEquals(201, $response->getStatusCode());
-    }
+    $this->actingAs($patientUser);
+
+    $service = app(AppointmentService::class);
+
+    $response = $service->createAppointment([
+        'availability_id' => $availability->id,
+        'appointment_date' => now()->next('monday')->toDateString(),
+        'appointment_time' => '10:00',
+    ]);
+
+    $this->assertEquals(201, $response->getStatusCode());
+}
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DoctorAvailabilityController;
 use App\Http\Controllers\DoctorDashbaord\DoctorAppointmentController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\OpticalStoreController;
 use App\Http\Controllers\DoctorDashbaord\DoctorNotificationController;
@@ -99,7 +100,11 @@ Route::middleware('auth:sanctum')->prefix('product')->group(function () {
     '/notifications/my',
     [NotificationController::class, 'myNotifications']
 );
-
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/me/doctor', [ProfileController::class, 'doctor']);
+     Route::get('/me/optical-store', [ProfileController::class, 'opticalStore']);
+     Route::get('/me/patient', [ProfileController::class, 'patient']);
+    });
 
 
 

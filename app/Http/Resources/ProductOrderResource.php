@@ -40,7 +40,22 @@ class ProductOrderResource extends JsonResource
                 ];
             }),
 
-            'prescription_id' => $this->prescription_id,
+            'prescription' => $this->whenLoaded('prescription', function() {
+                return [
+                    'id' => $this->prescription->id,
+                    'doctor_name' => $this->prescription->doctor->user->name ?? 'N/A',
+                    'details' => $this->prescription->details,
+                    'created_at' => $this->prescription->created_at,
+                    'right_sphere' =>$this->prescription->right_sphere,
+                    'right_cylinder' =>$this->prescription->right_cylinder,
+                    'right_axis' =>$this->prescription->right_axis,
+                    'left_sphere' =>$this->prescription->left_sphere,
+                    'left_cylinder' =>$this->prescription->left_cylinder,
+                    'left_axis' =>$this->prescription->left_axis,
+                    'medication_name' =>$this->prescription->medication_name,
+                     'effective_period' =>$this->prescription->effective_period,
+                ];
+            }),
         ];
     }
 }
